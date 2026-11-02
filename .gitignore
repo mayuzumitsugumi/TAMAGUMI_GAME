@@ -1,0 +1,9 @@
+.godot/
+build/
+export_credentials.cfg
+*.keystore
+*.jks
+.env
+.env.*
+!.env.example
+.DS_Store

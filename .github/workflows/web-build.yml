@@ -1,0 +1,36 @@
+name: Build Godot Web prototype
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install matching Godot and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          release=https://github.com/godotengine/godot/releases/download/4.6.3-stable
+          curl --fail --location --retry 3 "$release/Godot_v4.6.3-stable_linux.x86_64.zip" -o /tmp/godot.zip
+          curl --fail --location --retry 3 "$release/Godot_v4.6.3-stable_export_templates.tpz" -o /tmp/templates.zip
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          unzip -q /tmp/templates.zip -d /tmp/godot-templates
+          mkdir -p "$HOME/.local/share/godot/export_templates/4.6.3.stable"
+          cp /tmp/godot-templates/templates/* "$HOME/.local/share/godot/export_templates/4.6.3.stable/"
+          echo /tmp/godot >> "$GITHUB_PATH"
+      - name: Import and export
+        run: |
+          set -euo pipefail
+          Godot_v4.6.3-stable_linux.x86_64 --headless --editor --path . --quit
+          mkdir -p build/web
+          Godot_v4.6.3-stable_linux.x86_64 --headless --path . --export-release Web build/web/index.html
+          touch build/web/.nojekyll
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tamagumi-web-prototype
+          path: build/web
+          if-no-files-found: error
