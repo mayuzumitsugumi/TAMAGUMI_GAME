@@ -26,5 +26,6 @@ Push／Pull Request 會觸發 Web 建置，Actions 產物為 `tamagumi-web-proto
 Godot 快取、建置包、環境憑證與簽署金鑰不進版本庫。請勿把玩家備份或 Token 提交到公開專案。
 
 - [最低成本開發架構、流程與進度核對](docs/DEVELOPMENT_PLAN.md)
+- [雲端／本機交接清單與 ESP32 接手步驟（最新決策）](docs/HANDOFF.md)
 
 養成規則與正式介面另行討論；兌換機制暫不納入第一階段。
